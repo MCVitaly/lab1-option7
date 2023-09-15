@@ -14,6 +14,10 @@ int main()
 	cin >> k;
 	cout << "Enter x   -1<=x>=1" << endl;
 	cin >> x;
+	while ((x <= -1) || (x >= 1)) {
+	cout << "Enter correct x       -1<=x>=1 :";
+	cin >> x;
+}
 	long double num = 1 / pow((x + 1), 3);
 	long double sum = 0;
 	int i = 1;
