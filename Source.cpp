@@ -27,4 +27,5 @@ int main()
 		i++;
 	}
 	cout << setprecision(k)<< num << " " << sum;
+	return 0;
 }
