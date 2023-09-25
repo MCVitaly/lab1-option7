@@ -21,7 +21,7 @@ int main()
 	long double num = 1 / pow((x + 1), 3);
 	long double sum = 0;
 	int i = 1;
-	while ((abs(sum - num) >= pow(10, -k)))
+	while ((abs(sum - num) >= pow(10, -k-1)))
 	{
 		sum+= (pow(-1, (i+1))*i * (i + 1) * pow(x, (i-1))) / 2;
 		i++;
