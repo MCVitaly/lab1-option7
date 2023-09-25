@@ -14,7 +14,7 @@ int main()
 	cin >> size;
 	while ((size>maxSize) || (size < 2))
 	{
-		std::cout << "Enter correct size " << endl;
+		cout << "Enter correct size " << endl;
 		cin >> size;
 	}
 	double* arr = new double[size];
