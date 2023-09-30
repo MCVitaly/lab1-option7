@@ -85,7 +85,7 @@ int main()
 {
 	const int maxSize = 10;
 	int size;
-	cout << "Enter size of vector(num of cols=num of rows, 1<=size<=" << maxSize << " " << endl;
+	cout << "Enter size of vector(num of cols=num of rows, 1<=size<=" << maxSize << ") " << endl;
 	cin >> size;
 	while ((size > maxSize) || (size < 2))
 	{
