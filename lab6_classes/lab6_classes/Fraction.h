@@ -10,6 +10,8 @@ private:
 	int _numerator;
 	int _denominator;
 
+	ProperFraction() = default;
+
 	void reduceFraction();
 public:
 	ProperFraction(int numerator, int denominator);
