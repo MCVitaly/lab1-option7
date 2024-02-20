@@ -1,5 +1,4 @@
 #include <iostream>
-
 using namespace std;
 
 
@@ -8,7 +7,7 @@ int main()
 	_int16 A1, A2, A3, B1, B2, B3, C1, C2, C3;
 	cout << "Enter A3, A2, A1: ";
 	cin >> A3 >> A2 >> A1;
-	cout<< "Enter B3, B2, B1: ";
+	cout << "Enter B3, B2, B1: ";
 	cin >> B3 >> B2 >> B1;
 	_asm
 	{
@@ -24,14 +23,15 @@ int main()
 		add ax, B3
 		mov C3, ax
 	}
-	cout <<hex<< C3 << " " << C2 << " " << C1<<endl;
+	cout << hex << C3 << " " << C2 << " " << C1 << endl;
 	cout.unsetf(ios::hex);
 	_int64 result;
-	result = static_cast<_int64>(C3);;
-	result << 16;
-	result += static_cast<_int64>(C2);
-	result << 16;
-	result += static_cast<_int64>(C1);;
+	result = C3;
+	result <<= 16;
+	result += C2;
+	result <<= 16;
+	result += C1;
 	cout << result;
+
 	return 0;
 }
