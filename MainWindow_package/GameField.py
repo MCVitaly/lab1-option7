@@ -2,7 +2,6 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtCore import Qt, QRect
 from PyQt6.QtWidgets import QGridLayout, QLabel, QPushButton, QLineEdit, QWidget, QMessageBox
 from PyQt6.QtGui import QPixmap, QPainter, QColor, QPalette
-player = 1
 
 rgb_field_list=[0, 0, 139]
 rgb_crosseAndZero_list=[0, 0, 0]
@@ -13,9 +12,7 @@ class GameFieldButton(QPushButton):
         self.setFixedWidth(30)
         self.setStyleSheet(f"color: rgb({rgb_crosseAndZero_list[0]}, {rgb_crosseAndZero_list[1]}, {rgb_crosseAndZero_list[2]});"
                            f" background-color: white; font-size: 35px; min-width: 40px; min-height: 40px; ")
-
         self.setFixedHeight(30)
-
         self.access=True
 
 
@@ -40,6 +37,7 @@ class GameFieldCell_wdg(QWidget):
             [GameFieldButton() for _ in range(3)] for _ in range(3)
         ]
 
+
         for i in range(3):
             for j in range(3):
                 self.buttons[i][j].clicked.connect(lambda _, x_of_button=i, y_of_button=j: self.button_clicked(x_of_button, y_of_button))
@@ -53,25 +51,35 @@ class GameFieldCell_wdg(QWidget):
     def button_clicked(self, x_of_button, y_of_button):
         name_of_button=self.buttons[x_of_button][y_of_button]
 
+        for i in range(3):
+            for j in range(3):
+                if self._gameFieldPointer.cells[i][j]==self:
+                    self._gameFieldPointer.x_of_cell_before=i
+                    self._gameFieldPointer.y_of_cell_before=j
+        self._gameFieldPointer.current_x_of_cell=x_of_button
+        self._gameFieldPointer.current_y_of_cell=y_of_button
+
         if not name_of_button.access:
             return
 
-        global player
 
-        if player==1:
+        if self._gameFieldPointer.currentPlayer=='x':
             name_of_button.setText("x")
             name_of_button.setStyleSheet(f"color: rgb({rgb_crosseAndZero_list[0]}, {rgb_crosseAndZero_list[1]}, {rgb_crosseAndZero_list[2]});"
                            f" background-color: white; font-size: 35px; min-width: 40px; min-height: 40px; ")
-            player=2
+            self._gameFieldPointer.functionOfChangeCurrentPlayer('o')
+            self._gameFieldPointer.currentPlayer='o'
         else:
             name_of_button.setText("o")
             name_of_button.setStyleSheet(f"color: rgb({rgb_crosseAndZero_list[0]}, {rgb_crosseAndZero_list[1]}, {rgb_crosseAndZero_list[2]});"
                            f" background-color: white; font-size: 35px; min-width: 40px; min-height: 40px; ")
-            player=1
+            self._gameFieldPointer.functionOfChangeCurrentPlayer('x')
+            self._gameFieldPointer.currentPlayer='x'
 
         name_of_button.access=False
         self.check_vinner_in_cells()
         self.set_access_to_game_field(x_of_button, y_of_button)
+
 
 
 
@@ -85,7 +93,6 @@ class GameFieldCell_wdg(QWidget):
             self.buttons[0][0].text()==self.buttons[1][0].text()==self.buttons[2][0].text()=='x' or
             self.buttons[0][1].text()==self.buttons[1][1].text()==self.buttons[2][1].text()=='x' or
             self.buttons[0][2].text()==self.buttons[1][2].text()==self.buttons[2][2].text()=='x'):
-
             self.vinner_in_cell='x'
             for i in range(3):
                 for j in range(3):
@@ -130,7 +137,7 @@ class GameFieldCell_wdg(QWidget):
             self.dialog=QMessageBox()
             self.dialog.setWindowTitle('message')
             self.dialog.setIcon(QMessageBox.Icon.Information)
-            self.dialog.setText("Player 1 won")
+            self.dialog.setText("Player x won")
             self.dialog.exec()
             for i in range(3):
                 for j in range(3):
@@ -149,7 +156,7 @@ class GameFieldCell_wdg(QWidget):
             self.dialog = QMessageBox()
             self.dialog.setWindowTitle('message')
             self.dialog.setIcon(QMessageBox.Icon.Information)
-            self.dialog.setText("Player 2 won")
+            self.dialog.setText("Player o won")
             self.dialog.exec()
             for i in range(3):
                 for j in range(3):
@@ -173,9 +180,7 @@ class GameFieldCell_wdg(QWidget):
                         for l in range(3):
                             cells[i][j].buttons[k][l].access = False
     def set_access_to_game_field(self, x_of_button, y_of_button):
-        if (self == self._gameFieldPointer.cells[x_of_button][y_of_button] and (self.vinner_in_cell is None) and
-                (not self._gameFieldPointer.didFirstClickBe)):
-            self._gameFieldPointer.didFirstClickBe=True
+        if (self == self._gameFieldPointer.cells[x_of_button][y_of_button] and (self.vinner_in_cell is None) ):
             for i in range(3):
                 for j in range(3):
                     for k in range(3):
@@ -190,9 +195,6 @@ class GameFieldCell_wdg(QWidget):
                         self._gameFieldPointer.cells[x_of_button][y_of_button].buttons[i][j].setEnabled(True)
                         self._gameFieldPointer.cells[x_of_button][y_of_button].buttons[i][j].setStyleSheet(f"color: rgb({rgb_crosseAndZero_list[0]}, {rgb_crosseAndZero_list[1]}, {rgb_crosseAndZero_list[2]});"
                            f" background-color: white; font-size: 35px; min-width: 40px; min-height: 40px; ")
-        elif (self == self._gameFieldPointer.cells[x_of_button][y_of_button] and (self.vinner_in_cell is None) and
-                 self._gameFieldPointer.didFirstClickBe):
-            return
         elif(self == self._gameFieldPointer.cells[x_of_button][y_of_button] and not (self.vinner_in_cell is None)):
             for i in range(3):
                 for j in range(3):
@@ -245,14 +247,22 @@ class GameField(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
+        self.currentPlayer='x'
         self.accessToAllButtons_flag=True
         self.didFirstClickBe = False
         self.setAutoFillBackground(True)
+        self.current_x_of_cell=None
+        self.current_y_of_cell=None
+        self.x_of_cell_before=None
+        self.y_of_cell_before=None
+
+        self.functionOfChangeCurrentPlayer = None
 
         self.bigCrossAndZero_matrix=[[None for _ in range(3)] for _ in range(3)]
         self.layout_ = QGridLayout()
         self.layout_.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout_)
+
 
         self.cells=[[GameFieldCell_wdg(self) for _ in range(3)] for _ in range(3)]
 
@@ -270,9 +280,8 @@ class GameField(QWidget):
         painter.fillRect(rect, QColor(rgb_field_list[0], rgb_field_list[1], rgb_field_list[2]))
 
     def restartGameField(self):
-        global player
-        player=1
-        self.didFirstClickBe = False
+        self.currentPlayer='x'
+        self.functionOfChangeCurrentPlayer('x')
         for i in range(3):
             for j in range(3):
                 if(not (self.bigCrossAndZero_matrix[i][j] is None)):
@@ -293,12 +302,18 @@ class GameField(QWidget):
                         self.cells[i][j].buttons[k][l].setStyleSheet(f"color: rgb({rgb_crosseAndZero_list[0]}, {rgb_crosseAndZero_list[1]}, {rgb_crosseAndZero_list[2]});"
                            f" background-color: white; font-size: 35px; min-width: 40px; min-height: 40px; ")
 
+    def showCurrentPlayerForX(self, function_from_menu):
+        self.functionOfChangeCurrentPlayer = function_from_menu
+
+    def showCurrentPlayerForO(self, function_from_menu):
+        self.functionOfChangeCurrentPlayer = function_from_menu
+
 
 class bigZeroOrCross(QLabel):
     def __init__(self, symbol):
         super().__init__()
 
-
+        self.symbol = symbol
         self.setGeometry(8, 5, 145, 143)
         self.pen = QtGui.QPen()
         self.pen.setWidth(10)
@@ -319,4 +334,10 @@ class bigZeroOrCross(QLabel):
             self.painter.drawLine(self.width()-20, 20, 20, self.height()-20)
             self.painter.end()
         self.setPixmap(self.canvas)
+
+
+
+
+
+
 
