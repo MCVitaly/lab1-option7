@@ -139,7 +139,7 @@ class GameFieldCell_wdg(QWidget):
             self.dialog=QMessageBox()
             self.dialog.setWindowTitle('message')
             self.dialog.setIcon(QMessageBox.Icon.Information)
-            self.dialog.setText("Player x won")
+            self.dialog.setText(self._gameFieldPointer.nameOfXPlayer+' won')
             self.dialog.exec()
             for i in range(3):
                 for j in range(3):
@@ -158,7 +158,7 @@ class GameFieldCell_wdg(QWidget):
             self.dialog = QMessageBox()
             self.dialog.setWindowTitle('message')
             self.dialog.setIcon(QMessageBox.Icon.Information)
-            self.dialog.setText("Player o won")
+            self.dialog.setText(self._gameFieldPointer.nameOfOPlayer+' won')
             self.dialog.exec()
             for i in range(3):
                 for j in range(3):
@@ -248,6 +248,9 @@ class GameFieldCell_wdg(QWidget):
 class GameField(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
+
+        self.nameOfXPlayer='player x'
+        self.nameOfOPlayer='player o'
 
         self.currentPlayer='x'
         self.accessToAllButtons_flag=True

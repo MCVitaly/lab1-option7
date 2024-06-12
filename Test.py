@@ -1,4 +1,4 @@
-from MainWindow_package import GameField, Menu, Player
+from MainWindow_package import GameField, Menu, Player, getGameField
 from PyQt6.QtWidgets import QFileDialog, QMessageBox
 import json
 from PyQt6 import QtWidgets
@@ -16,6 +16,8 @@ menu=Menu(window)
 gameField=GameField(window)
 playerX=Player( 'x')
 playerO=Player( 'o')
+getGameField(gameField)
+
 
 menu.restartGameAction(gameField.restartGameField)
 getGameComponets(window, gameField, playerX, playerO)

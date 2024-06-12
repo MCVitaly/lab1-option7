@@ -1,9 +1,16 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QLabel, QPushButton, QVBoxLayout, QFileDialog, QWidget, QLineEdit
 from PyQt6.QtGui import QPixmap
+
+gameFieldPointer=None
+def getGameField(gameFieldPointer_):
+    global gameFieldPointer
+    gameFieldPointer=gameFieldPointer_
 class Player(QWidget):
     def __init__(self, playerSymbol):
         super().__init__()
+
+        self.gameFieldPointer=gameFieldPointer
 
         self.layout = QVBoxLayout()
 
@@ -32,6 +39,11 @@ class Player(QWidget):
 
     def savingName(self):
         self.name=self.playerName.displayText()
+        global gameFieldPointer
+        if self.playerSymbol=='x':
+            gameFieldPointer.nameOfXPlayer=self.name
+        elif self.playerSymbol=='o':
+            gameFieldPointer.nameOfOPlayer = self.name
 
     def showImage(self):
         file=QFileDialog()
