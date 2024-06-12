@@ -8,19 +8,23 @@ parent=None
 gameField=None
 playerX=None
 playerY=None
-def getGameComponetsToLoad(_parent, _gameField, _playerX, _playerY):
-    global parent, gameField, playerX, playerY
+window=None
+def getGameComponetsToLoad(_parent, _gameField, _playerX, _playerY, _window):
+    global parent, gameField, playerX, playerY, window
     parent=_parent
     gameField = _gameField
     playerX=_playerX
     playerY=_playerY
+    window=_window
 
 def loadGame():
+    global parent, gameField, playerX, playerY, window
 
-    with open('test_file.json', 'r') as file:
+    file_dialog = QFileDialog()
+    path, _ = file_dialog.getOpenFileName(window, "Load", "", "JSON Files (*.json)")
+
+    with open(path, 'r') as file:
         dataToLoad=json.load(file)
-
-    global parent, gameField, playerX, playerY
 
 
     gameField.restartGameField()

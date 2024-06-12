@@ -6,17 +6,19 @@ parent=None
 gameField=None
 playerX=None
 playerY=None
-def getGameComponets(_parent, _gameField, _playerX, _playerY):
-    global parent, gameField, playerX, playerY
+window=None
+def getGameComponets(_parent, _gameField, _playerX, _playerY, _window):
+    global parent, gameField, playerX, playerY, window
     parent=_parent
     gameField = _gameField
     playerX=_playerX
     playerY=_playerY
+    window=_window
 
 
 
 def saveGame():
-    global parent, gameField, playerX, playerY, rgb_field_list, rgb_crosseAndZero_list
+    global parent, gameField, playerX, playerY, rgb_field_list, rgb_crosseAndZero_list, window
     dataToSave = {
         "gameField": {
             'rgb_field_list': rgb_field_list,
@@ -34,7 +36,9 @@ def saveGame():
         'playerX': getPlayerState(playerX),
         'playerY': getPlayerState(playerY)
     }
-    with open('test_file.json', 'w') as f:
+    file_dialog = QFileDialog()
+    path, _ = file_dialog.getSaveFileName(window, "Save", "", "JSON Files (*.json)")
+    with open(path, 'w') as f:
         json.dump(dataToSave, f)
 
     dialog = QMessageBox(parent)

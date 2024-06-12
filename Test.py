@@ -20,8 +20,8 @@ getGameField(gameField)
 
 
 menu.restartGameAction(gameField.restartGameField)
-getGameComponets(window, gameField, playerX, playerO)
-getGameComponetsToLoad(window, gameField, playerX, playerO)
+getGameComponets(window, gameField, playerX, playerO, window)
+getGameComponetsToLoad(window, gameField, playerX, playerO, window)
 
 
 menu.saveGameAction(saveGame)
