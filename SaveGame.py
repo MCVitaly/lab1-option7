@@ -67,5 +67,5 @@ def getPlayerState(playerPointer):
     return {
         'styleSheet': playerPointer.label.styleSheet(),
         'name': playerPointer.playerName.displayText(),
-        'picturePath': playerPointer.picturePath
+        'picturePath': playerPointer.picturePath,
     }

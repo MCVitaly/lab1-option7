@@ -38,12 +38,15 @@ def loadGame():
     playerX.pixmap = playerX.pixmap.scaled(300, 300)
     playerX.playerPicture.setPixmap(playerX.pixmap)
     playerX.label.setStyleSheet(dataToLoad['playerX']['styleSheet'])
+    gameField.nameOfXPlayer=dataToLoad['playerX']['name']
+
 
     playerY.playerName.setText(dataToLoad['playerY']['name'])
     playerY.pixmap = QPixmap(dataToLoad['playerY']['picturePath'])
     playerY.pixmap = playerY.pixmap.scaled(300, 300)
     playerY.playerPicture.setPixmap(playerY.pixmap)
     playerY.label.setStyleSheet(dataToLoad['playerY']['styleSheet'])
+    gameField.nameOfOPlayer = dataToLoad['playerY']['name']
 
 
     gameField.currentPlayer=dataToLoad['gameField']['currentPlayer']
@@ -66,6 +69,7 @@ def loadGame():
                 gameField.bigCrossAndZero_matrix[i][j]=None
             else:
                 zeroOrCross=bigZeroOrCross(dataToLoad['gameField']['bigCrossAndZero_matrix'][i][j])
+                gameField.bigCrossAndZero_matrix[i][j]=zeroOrCross
                 gameField.layout_.addWidget(zeroOrCross, i, j)
 
     for i in range(3):
