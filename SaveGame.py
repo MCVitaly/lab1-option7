@@ -36,16 +36,17 @@ def saveGame():
         'playerX': getPlayerState(playerX),
         'playerY': getPlayerState(playerY)
     }
-    file_dialog = QFileDialog()
+    file_dialog = QFileDialog(window)
     path, _ = file_dialog.getSaveFileName(window, "Save", "", "JSON Files (*.json)")
-    with open(path, 'w') as f:
-        json.dump(dataToSave, f)
+    if path:
+        with open(path, 'w') as f:
+            json.dump(dataToSave, f)
 
-    dialog = QMessageBox(parent)
-    dialog.setWindowTitle('message')
-    dialog.setIcon(QMessageBox.Icon.Information)
-    dialog.setText("Game was saved")
-    dialog.exec()
+        dialog = QMessageBox(parent)
+        dialog.setWindowTitle('message')
+        dialog.setIcon(QMessageBox.Icon.Information)
+        dialog.setText("Game was saved")
+        dialog.exec()
 
 def buttonState(buttonPointer):
     return  {
